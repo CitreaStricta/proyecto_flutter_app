@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:proyecto_apps/features/navbar.dart';
 import '../global.dart';
 
 class Principal extends StatelessWidget {
@@ -8,11 +8,10 @@ class Principal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Principal ${Global.login}"),
-        ),
-        body: Center(
-          child: Text("ඞඞඞඞඞඞඞ login success"),
-        ));
+      drawer: navBar(),
+      appBar: AppBar(
+        title: Text("Principal ${Global.login}"),
+      ),
+    );
   }
 }

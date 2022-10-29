@@ -116,16 +116,26 @@ class _loginState extends State<login> {
                       child: Text("Acceder ඞ"))),
               sizedBox,
               GestureDetector(
-                  onLongPress: () {
-                    print("Longpress");
-                  },
-                  onTap: () {
-                    print("hola");
-                  },
-                  child: Text(
-                    "¿Olvido su password?",
-                    style: TextStyle(color: Colors.blue),
-                  ))
+                onLongPress: () {
+                  print("Longpress");
+                },
+                onTap: () {
+                  print("hola");
+                },
+                child: Text(
+                  "¿Olvido su password?",
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // AQUI LA DIRECCION PARA LA PAGINA DE SIGN_UP
+                },
+                child: Text(
+                  "Sign Up",
+                  style: TextStyle(color: Colors.blue),
+                ),
+              )
             ],
           ),
         ),
