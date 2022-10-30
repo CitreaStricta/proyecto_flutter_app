@@ -8,9 +8,9 @@ class Principal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: navBar(),
+      drawer: NavBar(),
       appBar: AppBar(
-        title: Text("Principal ${Global.login}"),
+        title: Text("${Global.login}"),
       ),
     );
   }

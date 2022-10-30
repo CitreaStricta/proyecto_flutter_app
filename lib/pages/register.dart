@@ -1,34 +1,34 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:proyecto_apps/global.dart';
 import 'package:proyecto_apps/pages/principal.dart';
-import 'package:proyecto_apps/pages/register.dart';
+import 'package:proyecto_apps/pages/login.dart';
 import 'package:proyecto_apps/services/loginService.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _LoginState extends State<Login> {
+class _RegisterState extends State<Register> {
   late final pref;
 
   TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordConfirmController = TextEditingController();
 
   Future<void> validarDatos(String email, String password) async {
     final response = await LoginService().validar(email, password);
 
-    print("login status code: " + response.statusCode.toString());
-
     if (response.statusCode == 200) {
       //almacenar de alguna manera el login
       await pref.setString('Usuario', email);
-      Global.login = response.body;
+      Global.login = email;
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -40,7 +40,42 @@ class _LoginState extends State<Login> {
         context: context,
         type: CoolAlertType.error,
         title: 'Oops...',
-        text: 'Email o password incorrectos',
+        text: 'Algo salió mal :(',
+        loopAnimation: false,
+      );
+    }
+  }
+
+  Future<void> registrarDatos(
+      String email, String nombre, String password) async {
+    final response = await LoginService().registrar(email, nombre, password);
+
+    print("register status code: " + response.statusCode.toString());
+
+    if (response.statusCode == 201) {
+      //almacenar de alguna manera el login
+      await pref.setString('Usuario', email);
+      Global.login = email;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Principal(),
+        ),
+      );
+    } else if (response.statusCode == 200) {
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        title: 'Oops...',
+        text: 'Usuario ya existe',
+        loopAnimation: false,
+      );
+    } else {
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        title: 'Oops...',
+        text: 'Algo salió mal :(',
         loopAnimation: false,
       );
     }
@@ -52,13 +87,6 @@ class _LoginState extends State<Login> {
   void initState() {
     //TODO: implement initState
     super.initState();
-    cargaPreferencia();
-  }
-
-  void cargaPreferencia() async {
-    pref = await SharedPreferences.getInstance();
-    login_guardado = pref.getString("Usuario");
-    emailController.text = login_guardado == null ? "" : login_guardado!;
   }
 
   SizedBox sizedBox(double _height) {
@@ -80,7 +108,7 @@ class _LoginState extends State<Login> {
               //   child: Image.asset('assets/tocho.jpg', fit: BoxFit.fill),
               // ),
               const Text(
-                "Inicia sesión",
+                "Crea tu cuenta",
                 textScaleFactor: 1.2,
               ),
               sizedBox(30),
@@ -97,6 +125,18 @@ class _LoginState extends State<Login> {
               ),
               sizedBox(10),
               TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  hintText: "Ingrese su nombre",
+                  labelText: "Nombre",
+                  suffixIcon: const Icon(Icons.person, color: Colors.black54),
+                ),
+              ),
+              sizedBox(10),
+              TextField(
                 controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
@@ -104,6 +144,18 @@ class _LoginState extends State<Login> {
                       borderRadius: BorderRadius.circular(40)),
                   hintText: "Ingrese su password",
                   labelText: "Password",
+                  suffixIcon: const Icon(Icons.lock),
+                ),
+              ),
+              sizedBox(10),
+              TextField(
+                controller: passwordConfirmController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(40)),
+                  hintText: "Confirme su password",
+                  labelText: "Confirm password",
                   suffixIcon: const Icon(Icons.lock),
                 ),
               ),
@@ -123,6 +175,14 @@ class _LoginState extends State<Login> {
                       text: 'Debes proporcionar un email',
                       loopAnimation: false,
                     );
+                  } else if (nameController.text.isEmpty) {
+                    CoolAlert.show(
+                      context: context,
+                      type: CoolAlertType.error,
+                      title: 'Oops...',
+                      text: 'Debes proporcionar un nombre',
+                      loopAnimation: false,
+                    );
                   } else if (passwordController.text.isEmpty) {
                     CoolAlert.show(
                       context: context,
@@ -131,45 +191,45 @@ class _LoginState extends State<Login> {
                       text: 'Debes proporcionar una password',
                       loopAnimation: false,
                     );
+                  } else if (passwordConfirmController.text.isEmpty) {
+                    CoolAlert.show(
+                      context: context,
+                      type: CoolAlertType.error,
+                      title: 'Oops...',
+                      text: 'Debes confirmar la password',
+                      loopAnimation: false,
+                    );
+                  } else if (!passwordController.text
+                      .contains(passwordConfirmController.text)) {
+                    CoolAlert.show(
+                      context: context,
+                      type: CoolAlertType.error,
+                      title: 'Oops...',
+                      text: 'Las passwords deben coincidir',
+                      loopAnimation: false,
+                    );
                   } else {
-                    validarDatos(
+                    registrarDatos(
                       emailController.text,
+                      nameController.text,
                       passwordController.text,
                     );
                   }
                 },
-                child: Text("Acceder"),
+                child: Text("Registrarse"),
               ),
               sizedBox(30),
-              GestureDetector(
-                onLongPress: () {
-                  print("Longpress");
-                },
-                onTap: () {
-                  print("hola");
-                },
-                child: const Text(
-                  "¿Olvido su password?",
-                  style: TextStyle(color: Colors.blue),
-                ),
-              ),
-              sizedBox(10),
               GestureDetector(
                 onTap: () {
                   // AQUI LA DIRECCION PARA LA PAGINA DE SIGN_UP
                 },
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Register(),
-                      ),
-                    );
+                    Navigator.pop(context);
                     // AQUI TAMBIEN LA DIRECCION PARA LA PAGINA DE SIGN_UP
                   },
                   child: const Text(
-                    "Crear una cuenta",
+                    "Ya tengo cuenta",
                     style: TextStyle(
                       color: Colors.blue,
                       inherit: false,

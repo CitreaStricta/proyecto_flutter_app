@@ -11,7 +11,29 @@ class LoginService {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{'login': login, 'pass': pass}),
+      body: jsonEncode(
+        <String, String>{
+          'login': login,
+          'pass': pass,
+        },
+      ),
+    );
+  }
+
+  Future<http.Response> registrar(
+      String login, String nombre, String pass) async {
+    return await http.put(
+      Uri.parse(Global.baseApiUrl + '/api/Usuarios'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        <String, String>{
+          'login': login,
+          'nombre': nombre,
+          'pass': pass,
+        },
+      ),
     );
   }
 }
