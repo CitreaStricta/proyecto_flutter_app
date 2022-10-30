@@ -162,7 +162,7 @@ class _RegisterState extends State<Register> {
               sizedBox(60),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.indigo,
+                  // backgroundColor: Colors.indigo,
                   shape: const StadiumBorder(),
                   minimumSize: Size(double.infinity, 60),
                 ),
