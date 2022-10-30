@@ -18,7 +18,6 @@ class _RegisterState extends State<Register> {
   late final pref;
 
   TextEditingController emailController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordConfirmController = TextEditingController();
 
@@ -46,36 +45,21 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  Future<void> registrarDatos(
-      String email, String nombre, String password) async {
-    final response = await LoginService().registrar(email, nombre, password);
+  Future<void> registrarDatos(String email, String password) async {
+    final response = await LoginService().registrar(email, password);
 
     print("register status code: " + response.statusCode.toString());
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       //almacenar de alguna manera el login
-      await pref.setString('Usuario', email);
       Global.login = email;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Principal(),
-        ),
-      );
-    } else if (response.statusCode == 200) {
-      CoolAlert.show(
-        context: context,
-        type: CoolAlertType.error,
-        title: 'Oops...',
-        text: 'Usuario ya existe',
-        loopAnimation: false,
-      );
+      Navigator.pop(context);
     } else {
       CoolAlert.show(
         context: context,
         type: CoolAlertType.error,
         title: 'Oops...',
-        text: 'Algo salió mal :(',
+        text: 'Ese email ya está registrado',
         loopAnimation: false,
       );
     }
@@ -125,18 +109,6 @@ class _RegisterState extends State<Register> {
               ),
               sizedBox(10),
               TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  hintText: "Ingrese su nombre",
-                  labelText: "Nombre",
-                  suffixIcon: const Icon(Icons.person, color: Colors.black54),
-                ),
-              ),
-              sizedBox(10),
-              TextField(
                 controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
@@ -175,14 +147,6 @@ class _RegisterState extends State<Register> {
                       text: 'Debes proporcionar un email',
                       loopAnimation: false,
                     );
-                  } else if (nameController.text.isEmpty) {
-                    CoolAlert.show(
-                      context: context,
-                      type: CoolAlertType.error,
-                      title: 'Oops...',
-                      text: 'Debes proporcionar un nombre',
-                      loopAnimation: false,
-                    );
                   } else if (passwordController.text.isEmpty) {
                     CoolAlert.show(
                       context: context,
@@ -211,7 +175,6 @@ class _RegisterState extends State<Register> {
                   } else {
                     registrarDatos(
                       emailController.text,
-                      nameController.text,
                       passwordController.text,
                     );
                   }

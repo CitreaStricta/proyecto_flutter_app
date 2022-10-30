@@ -28,7 +28,7 @@ class _LoginState extends State<Login> {
     if (response.statusCode == 200) {
       //almacenar de alguna manera el login
       await pref.setString('Usuario', email);
-      Global.login = response.body;
+      Global.login = email;
       Navigator.push(
         context,
         MaterialPageRoute(

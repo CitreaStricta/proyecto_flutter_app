@@ -7,7 +7,7 @@ import '../global.dart';
 class LoginService {
   Future<http.Response> validar(String login, String pass) async {
     return await http.post(
-      Uri.parse(Global.baseApiUrl + '/api/Usuarios'),
+      Uri.parse('${Global.baseApiUrl}/api/Usuarios'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -20,20 +20,12 @@ class LoginService {
     );
   }
 
-  Future<http.Response> registrar(
-      String login, String nombre, String pass) async {
-    return await http.put(
-      Uri.parse(Global.baseApiUrl + '/api/Usuarios'),
+  Future<http.Response> registrar(String login, String pass) async {
+    return await http.post(
+      Uri.parse('${Global.baseApiUrl}/api/Usuarios?login=$login&pass=$pass'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(
-        <String, String>{
-          'login': login,
-          'nombre': nombre,
-          'pass': pass,
-        },
-      ),
     );
   }
 }
