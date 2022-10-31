@@ -1,5 +1,6 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:proyecto_apps/global.dart';
+import 'package:proyecto_apps/pages/page2.dart';
 import 'package:proyecto_apps/pages/principal.dart';
 import 'package:proyecto_apps/pages/register.dart';
 import 'package:proyecto_apps/services/loginService.dart';
@@ -19,51 +20,6 @@ class _LoginState extends State<Login> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
-  Future<void> validarDatos(String email, String password) async {
-    final response = await LoginService().validar(email, password);
-
-    print("login status code: " + response.statusCode.toString());
-
-    if (response.statusCode == 200) {
-      //almacenar de alguna manera el login
-      await pref.setString('Usuario', email);
-      Global.login = email;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Principal(),
-        ),
-      );
-    } else {
-      CoolAlert.show(
-        context: context,
-        type: CoolAlertType.error,
-        title: 'Oops...',
-        text: 'Email o password incorrectos',
-        loopAnimation: false,
-      );
-    }
-  }
-
-  String? login_guardado = "";
-
-  @override
-  void initState() {
-    //TODO: implement initState
-    super.initState();
-    cargaPreferencia();
-  }
-
-  void cargaPreferencia() async {
-    pref = await SharedPreferences.getInstance();
-    login_guardado = pref.getString("Usuario");
-    emailController.text = login_guardado == null ? "" : login_guardado!;
-  }
-
-  SizedBox sizedBox(double _height) {
-    return SizedBox(height: _height);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,9 +111,6 @@ class _LoginState extends State<Login> {
               ),
               sizedBox(10),
               GestureDetector(
-                onTap: () {
-                  // AQUI LA DIRECCION PARA LA PAGINA DE SIGN_UP
-                },
                 child: TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -182,5 +135,52 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  Future<void> validarDatos(String email, String password) async {
+    final response = await LoginService().validar(email, password);
+
+    print("login status code: " + response.statusCode.toString());
+
+    if (response.statusCode == 200) {
+      //almacenar de alguna manera el login
+      await pref.setString('Usuario', email);
+      Global.login = email;
+      // EL INICIO PARA EL CONTEXTO DE LA PANTALLA "Principal" ESTA BIEN AQUI?
+      // NO SERIA MEJOR PARA LAS PERSONAS QUE LEEN EL CODIGO QUE ESTE
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Page2(),
+        ),
+      );
+    } else {
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        title: 'Oops...',
+        text: 'Email o password incorrectos',
+        loopAnimation: false,
+      );
+    }
+  }
+
+  String? login_guardado = "";
+
+  @override
+  void initState() {
+    //TODO: implement initState
+    super.initState();
+    cargaPreferencia();
+  }
+
+  void cargaPreferencia() async {
+    pref = await SharedPreferences.getInstance();
+    login_guardado = pref.getString("Usuario");
+    emailController.text = login_guardado == null ? "" : login_guardado!;
+  }
+
+  SizedBox sizedBox(double _height) {
+    return SizedBox(height: _height);
   }
 }
