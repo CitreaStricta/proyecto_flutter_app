@@ -18,9 +18,61 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   late final pref;
 
-  TextEditingController emailController = TextEditingController();
+  TextEditingController userController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+<<<<<<< HEAD
+=======
+  Future<void> validarDatos(String user, String password) async {
+    final response = await LoginService().validar(user, password);
+
+    print("login status code: " + response.statusCode.toString());
+
+    if (response.statusCode == 200) {
+      //almacenar de alguna manera el login
+      await pref.setString('Usuario', user);
+      Global.login = user;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Principal(),
+        ),
+      );
+    } else {
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        title: 'Oops...',
+        text: 'Usuario o password incorrectos',
+        loopAnimation: false,
+      );
+    }
+  }
+
+  void recoverPassword(String user) {
+    LoginService().recovery(user, context);
+  }
+
+  String? login_guardado = "";
+
+  @override
+  void initState() {
+    //TODO: implement initState
+    super.initState();
+    cargaPreferencia();
+  }
+
+  void cargaPreferencia() async {
+    pref = await SharedPreferences.getInstance();
+    login_guardado = pref.getString("Usuario");
+    userController.text = login_guardado == null ? "" : login_guardado!;
+  }
+
+  SizedBox sizedBox(double _height) {
+    return SizedBox(height: _height);
+  }
+
+>>>>>>> 2c537208fd8425b088b6754355afbb23d4c2d4bb
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,14 +93,14 @@ class _LoginState extends State<Login> {
               ),
               sizedBox(30),
               TextField(
-                controller: emailController,
+                controller: userController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(40),
                   ),
-                  hintText: "Ingrese su email",
-                  labelText: "Email",
-                  suffixIcon: const Icon(Icons.email, color: Colors.black54),
+                  hintText: "Ingrese su nombre de usuario",
+                  labelText: "Usuario",
+                  suffixIcon: const Icon(Icons.person, color: Colors.black54),
                 ),
               ),
               sizedBox(10),
@@ -71,12 +123,12 @@ class _LoginState extends State<Login> {
                   minimumSize: Size(double.infinity, 60),
                 ),
                 onPressed: () {
-                  if (emailController.text.isEmpty) {
+                  if (userController.text.isEmpty) {
                     CoolAlert.show(
                       context: context,
                       type: CoolAlertType.error,
                       title: 'Oops...',
-                      text: 'Debes proporcionar un email',
+                      text: 'Debes proporcionar un nombre de usuario',
                       loopAnimation: false,
                     );
                   } else if (passwordController.text.isEmpty) {
@@ -89,7 +141,7 @@ class _LoginState extends State<Login> {
                     );
                   } else {
                     validarDatos(
-                      emailController.text,
+                      userController.text,
                       passwordController.text,
                     );
                   }
@@ -104,9 +156,28 @@ class _LoginState extends State<Login> {
                 onTap: () {
                   print("hola");
                 },
-                child: const Text(
-                  "¿Olvido su password?",
-                  style: TextStyle(color: Colors.blue),
+                child: TextButton(
+                  onPressed: () {
+                    if (userController.text.isEmpty) {
+                      CoolAlert.show(
+                        context: context,
+                        type: CoolAlertType.error,
+                        title: 'Oops...',
+                        text: 'Debes proporcionar un nombre de usuario',
+                        loopAnimation: false,
+                      );
+                    } else {
+                      recoverPassword(userController.text);
+                    }
+                  },
+                  // AQUI TAMBIEN LA DIRECCION PARA LA PAGINA DE SIGN_UP
+                  child: const Text(
+                    "¿Olvido su password?",
+                    style: TextStyle(
+                      color: Colors.blue,
+                      inherit: false,
+                    ),
+                  ),
                 ),
               ),
               sizedBox(10),
