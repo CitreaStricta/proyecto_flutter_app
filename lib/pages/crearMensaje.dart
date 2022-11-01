@@ -5,22 +5,22 @@ import '../global.dart';
 import '../models/todo.dart';
 import '../widgets/database_helper.dart';
 
-class Page1 extends StatefulWidget {
+class CrearMensaje extends StatefulWidget {
   static const routeName2 = '/detailTodoScreen';
   Todo? todo;
 
-  Page1({Key? key, this.todo}) : super(key: key);
+  CrearMensaje({Key? key, this.todo}) : super(key: key);
 
   @override
-  State<Page1> createState() => _Page1State(todo);
+  State<CrearMensaje> createState() => _CrearMensajeState(todo);
 }
 
-class _Page1State extends State<Page1> {
+class _CrearMensajeState extends State<CrearMensaje> {
   Todo? todo;
   final descriptionTextController = TextEditingController();
   final titleTextController = TextEditingController();
 
-  _Page1State(this.todo);
+  _CrearMensajeState(this.todo);
 
   @override
   void initState() {
@@ -47,11 +47,14 @@ class _Page1State extends State<Page1> {
       body: Column(
         children: <Widget>[
           // area de titulo
+          SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Título"),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                  labelText: "Título"),
               maxLines: 1,
               controller: titleTextController,
             ),
@@ -61,7 +64,9 @@ class _Page1State extends State<Page1> {
             padding: const EdgeInsets.all(16.0),
             child: TextField(
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Descripción"),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                  labelText: "Descripción"),
               maxLines: 10,
               controller: descriptionTextController,
             ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../pages/page1.dart';
+import '../pages/crearMensaje.dart';
 
 class CreateTodoButton extends StatelessWidget {
+  const CreateTodoButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -19,7 +21,7 @@ class CreateTodoButton extends StatelessWidget {
     final result = await Navigator.push(
       context,
       // Create the SelectionScreen in the next step.
-      MaterialPageRoute(builder: (context) => Page1()),
+      MaterialPageRoute(builder: (context) => CrearMensaje()),
     );
     //  Scaffold.of(context)
     //    ..removeCurrentSnackBar()

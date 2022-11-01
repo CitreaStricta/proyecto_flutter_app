@@ -1,6 +1,5 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:proyecto_apps/global.dart';
-import 'package:proyecto_apps/pages/principal.dart';
 import 'package:proyecto_apps/pages/login.dart';
 import 'package:proyecto_apps/services/loginService.dart';
 import 'package:flutter/material.dart';
@@ -20,30 +19,6 @@ class _RegisterState extends State<Register> {
   TextEditingController userController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordConfirmController = TextEditingController();
-
-  Future<void> validarDatos(String user, String password) async {
-    final response = await LoginService().validar(user, password);
-
-    if (response.statusCode == 200) {
-      //almacenar de alguna manera el login
-      await pref.setString('Usuario', user);
-      Global.login = user;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Principal(),
-        ),
-      );
-    } else {
-      CoolAlert.show(
-        context: context,
-        type: CoolAlertType.error,
-        title: 'Oops...',
-        text: 'Algo salió mal :(',
-        loopAnimation: false,
-      );
-    }
-  }
 
   Future<void> registrarDatos(String user, String password) async {
     final response = await LoginService().registrar(user, password);
@@ -65,16 +40,14 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  String? login_guardado = "";
-
   @override
   void initState() {
     //TODO: implement initState
     super.initState();
   }
 
-  SizedBox sizedBox(double _height) {
-    return SizedBox(height: _height);
+  SizedBox sizedBox(double height) {
+    return SizedBox(height: height);
   }
 
   @override
@@ -86,11 +59,6 @@ class _RegisterState extends State<Register> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // SizedBox(
-              //   width: 400,
-              //   height: 200,
-              //   child: Image.asset('assets/tocho.jpg', fit: BoxFit.fill),
-              // ),
               const Text(
                 "Crea tu cuenta",
                 textScaleFactor: 1.2,
@@ -104,7 +72,7 @@ class _RegisterState extends State<Register> {
                   ),
                   hintText: "Ingrese su nombre de usuario",
                   labelText: "Usuario",
-                  suffixIcon: const Icon(Icons.person, color: Colors.black54),
+                  suffixIcon: const Icon(Icons.person),
                 ),
               ),
               sizedBox(10),
@@ -127,7 +95,7 @@ class _RegisterState extends State<Register> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(40)),
                   hintText: "Confirme su password",
-                  labelText: "Confirm password",
+                  labelText: "Confirmar password",
                   suffixIcon: const Icon(Icons.lock),
                 ),
               ),
@@ -179,7 +147,7 @@ class _RegisterState extends State<Register> {
                     );
                   }
                 },
-                child: Text("Registrarse"),
+                child: const Text("Registrarse"),
               ),
               sizedBox(30),
               GestureDetector(

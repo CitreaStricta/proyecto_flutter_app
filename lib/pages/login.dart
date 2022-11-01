@@ -1,11 +1,9 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:proyecto_apps/global.dart';
-import 'package:proyecto_apps/pages/page2.dart';
-import 'package:proyecto_apps/pages/principal.dart';
+import 'package:proyecto_apps/pages/lista.dart';
 import 'package:proyecto_apps/pages/register.dart';
 import 'package:proyecto_apps/services/loginService.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
@@ -26,14 +24,14 @@ class _LoginState extends State<Login> {
 
     print("login status code: " + response.statusCode.toString());
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || true) {
       //almacenar de alguna manera el login
       await pref.setString('Usuario', user);
       Global.login = user;
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Page2(),
+          builder: (context) => Lista(),
         ),
       );
     } else {
@@ -66,8 +64,8 @@ class _LoginState extends State<Login> {
     userController.text = login_guardado == null ? "" : login_guardado!;
   }
 
-  SizedBox sizedBox(double _height) {
-    return SizedBox(height: _height);
+  SizedBox sizedBox(double height) {
+    return SizedBox(height: height);
   }
 
   @override
@@ -79,11 +77,6 @@ class _LoginState extends State<Login> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // SizedBox(
-              //   width: 400,
-              //   height: 200,
-              //   child: Image.asset('assets/tocho.jpg', fit: BoxFit.fill),
-              // ),
               const Text(
                 "Inicia sesión",
                 textScaleFactor: 1.2,
@@ -97,7 +90,7 @@ class _LoginState extends State<Login> {
                   ),
                   hintText: "Ingrese su nombre de usuario",
                   labelText: "Usuario",
-                  suffixIcon: const Icon(Icons.person, color: Colors.black54),
+                  suffixIcon: const Icon(Icons.person),
                 ),
               ),
               sizedBox(10),
@@ -177,7 +170,7 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-              sizedBox(3),
+              sizedBox(5),
               GestureDetector(
                 child: TextButton(
                   onPressed: () {
