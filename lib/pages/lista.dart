@@ -5,7 +5,6 @@ import 'package:proyecto_apps/pages/crearMensaje.dart';
 import '../global.dart';
 import '../models/todo.dart';
 import '../widgets/database_helper.dart';
-import 'package:http/http.dart' as http;
 
 class Lista extends StatefulWidget {
   Lista({Key? key}) : super(key: key);
@@ -15,7 +14,13 @@ class Lista extends StatefulWidget {
 }
 
 class _ListaState extends State<Lista> {
-  void funsio() {}
+  late Future<List<Todo>> futureTodo;
+
+  @override
+  void initState() {
+    super.initState();
+    futureTodo = api_handler.instance.retrieveTodos();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +42,7 @@ class _ListaState extends State<Lista> {
         child: const Icon(Icons.add_rounded),
       ),
       body: FutureBuilder<List<Todo>>(
-        future: DatabaseHelper.instance.retrieveTodos(),
+        future: api_handler.instance.retrieveTodos(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
@@ -51,14 +56,14 @@ class _ListaState extends State<Lista> {
                   leading: Text(snapshot.data![index].id.toString()),
                   onTap: () =>
                       _navigateToDetail(context, snapshot.data![index]),
-                  trailing: IconButton(
-                    alignment: Alignment.center,
-                    icon: const Icon(Icons.delete),
-                    onPressed: () async {
-                      // _deleteTodo(snapshot.data![index]);
-                      // setState(() {});
-                    },
-                  ),
+                  // trailing: IconButton(
+                  //   alignment: Alignment.center,
+                  //   icon: const Icon(Icons.delete),
+                  //   onPressed: () async {
+                  //     // _deleteTodo(snapshot.data![index]);
+                  //     // setState(() {});
+                  //   },
+                  // ),
                 );
               },
             );
@@ -73,8 +78,10 @@ class _ListaState extends State<Lista> {
 }
 
 _deleteTodo(Todo todo) {
-  DatabaseHelper.instance.deleteTodo(todo.id!);
+  api_handler.instance.deleteTodo(todo.id!);
 }
+
+_get_Details() {}
 
 _navigateToDetail(BuildContext context, Todo todo) async {
   Navigator.push(

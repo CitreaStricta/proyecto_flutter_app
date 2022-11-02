@@ -4,7 +4,6 @@ class Todo {
   String title;
   String login;
   String? time;
-  static const String TABLENAME = "todos";
 
   Todo(
       {this.id,

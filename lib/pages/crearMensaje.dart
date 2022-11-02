@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_apps/pages/login.dart';
 
 import '../global.dart';
 import '../models/todo.dart';
@@ -97,14 +96,14 @@ class _CrearMensajeState extends State<CrearMensaje> {
 
   _saveTodo(String title, String content) async {
     if (todo == null) {
-      DatabaseHelper.instance.insertTodo(Todo(
+      api_handler.instance.insertTodo(Todo(
         title: titleTextController.text,
         content: descriptionTextController.text,
         login: Global.login,
       ));
       Navigator.pop(context, "Tu tarea fue guardada.");
     } else {
-      await DatabaseHelper.instance.updateTodo(Todo(
+      await api_handler.instance.updateTodo(Todo(
         id: todo?.id,
         login: Global.login,
         title: title,

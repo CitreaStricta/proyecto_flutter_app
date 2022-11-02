@@ -24,8 +24,7 @@ class _LoginState extends State<Login> {
 
     print("login status code: " + response.statusCode.toString());
 
-    if (response.statusCode == 200 || true) {
-      //almacenar de alguna manera el login
+    if (response.statusCode == 200) {
       await pref.setString('Usuario', user);
       Global.login = user;
       Navigator.push(
@@ -140,12 +139,6 @@ class _LoginState extends State<Login> {
               ),
               sizedBox(30),
               GestureDetector(
-                onLongPress: () {
-                  print("Longpress");
-                },
-                onTap: () {
-                  print("hola");
-                },
                 child: TextButton(
                   onPressed: () {
                     if (userController.text.isEmpty) {
@@ -160,7 +153,6 @@ class _LoginState extends State<Login> {
                       recoverPassword(userController.text);
                     }
                   },
-                  // AQUI TAMBIEN LA DIRECCION PARA LA PAGINA DE SIGN_UP
                   child: const Text(
                     "¿Olvido su password?",
                     style: TextStyle(
@@ -170,7 +162,7 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-              sizedBox(5),
+              sizedBox(3),
               GestureDetector(
                 child: TextButton(
                   onPressed: () {
@@ -180,7 +172,6 @@ class _LoginState extends State<Login> {
                         builder: (context) => const Register(),
                       ),
                     );
-                    // AQUI TAMBIEN LA DIRECCION PARA LA PAGINA DE SIGN_UP
                   },
                   child: const Text(
                     "Crear una cuenta",

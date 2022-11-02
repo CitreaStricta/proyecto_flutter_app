@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:cool_alert/cool_alert.dart';
 import 'package:http/http.dart' as http;
